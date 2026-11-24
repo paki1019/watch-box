@@ -10,7 +10,15 @@ chrome.runtime.onInstalled.addListener(async ({ reason }) => {
     id: "import",
     title: "Watch Box에 추가",
     contexts: ["selection"],
-    documentUrlPatterns: ["https://chatgpt.com/*", "https://chat.openai.com/*"],
+    documentUrlPatterns: [
+      "https://chatgpt.com/*",
+      "https://chat.openai.com/*",
+      "https://claude.ai/*",
+      "https://gemini.google.com/*",
+      "https://copilot.microsoft.com/*",
+      "https://www.perplexity.ai/*",
+      "https://grok.com/*",
+    ],
   });
 });
 

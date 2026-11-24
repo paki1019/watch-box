@@ -596,7 +596,7 @@ form.addEventListener("submit", async (e) => {
   cacheImages([watch]);
 });
 
-// 보유/드림 구분은 프롬프트에 심어 ChatGPT가 JSON에 그대로 담아 오게 한다
+// 보유/드림 구분은 프롬프트에 심어 AI가 JSON에 그대로 담아 오게 한다
 const prompt = (list) => `위 시계의 정보를 아래 JSON 배열 형식으로만 정리해줘. 설명 없이 코드 블록 하나로 출력해.
 
 [
@@ -650,8 +650,11 @@ const importDialog = $("import-dialog");
 let importItems = [];
 
 const clip = (v, max) => String(v ?? "").trim().slice(0, max);
-/** "41mm", 41 같은 값에서 숫자만 뽑아 문자열로 */
-const num = (v) => String(v ?? "").match(/\d+(\.\d+)?/)?.[0] ?? "";
+/** "41mm", 41 같은 값에서 숫자만 뽑아 정보 창과 같은 자릿수로 맞춘 문자열로 */
+const num = (v, digits = 2) => {
+  const found = String(v ?? "").match(/\d+(\.\d+)?/)?.[0];
+  return found ? String(Number(Number(found).toFixed(digits))) : "";
+};
 const dedupKey = (w) => `${w.brand}|${w.model}`.toLowerCase();
 
 /** 코드 펜스·앞뒤 설명이 섞인 텍스트에서 JSON 부분만 골라 시계 목록으로 변환 */
@@ -686,9 +689,9 @@ function parseWatches(text) {
       weight: num(raw.weight),
       weightNote: clip(raw.weightNote, 30),
       movement: clip(raw.movement, 60),
-      reserve: num(raw.reserve),
+      reserve: num(raw.reserve, 0),
       material: clip(raw.material, 40),
-      water: num(raw.water),
+      water: num(raw.water, 0),
       released: String(raw.released ?? "").match(/\b(18|19|20)\d{2}\b/)?.[0] ?? "",
       date: /^\d{4}-\d{2}/.test(raw.date) ? raw.date.slice(0, 7) : "",
       method: clip(raw.method, 30),
@@ -1115,17 +1118,17 @@ $("welcome-help").addEventListener("click", () => {
   $("help-dialog").scrollTop = 0;
 });
 
-/** 도움말 내용을 AI에 붙여넣어 물어볼 수 있는 프롬프트로 만든다 */
+/** 화면에 보이지 않는 자세한 도움말을 AI에 붙여넣어 물어볼 수 있는 프롬프트로 만든다 */
 function helpPrompt() {
   const lines = [];
-  for (const node of document.querySelector("#help-dialog .help").children) {
+  for (const node of $("help-full").content.children) {
     if (node.tagName === "H3") lines.push("", `## ${node.textContent}`);
     else [...node.children].forEach((li, i) => lines.push(`${node.tagName === "OL" ? `${i + 1}.` : "-"} ${li.textContent.trim()}`));
   }
   return `너는 크롬 확장 프로그램 "Watch Box"의 사용 안내 도우미야. Watch Box는 보유 시계와 드림 워치(갖고 싶은 시계)를 관리하는 프로그램이고, 만든 사람은 OBJECT_a야. 아래 [도움말]만을 근거로 내 질문에 답해 줘.
 
 규칙:
-- 도움말에 없는 기능은 지어내지 말고 도움말에 없는 내용이라고 말할 것
+- 도움말에 없는 기능은 지어내지 말고 도움말에 없는 내용이라고 말할 것. 이어서 도움말의 [문의] 창구를 알려 주고, 내가 원하면 그대로 붙여넣을 수 있는 문의 글 초안을 써 줄 것
 - 화면의 버튼·항목 이름은 도움말에 적힌 그대로 쓸 것
 - 답은 짧게, 따라 할 순서가 있으면 번호 목록으로
 - 이 메시지에는 Watch Box가 무엇인지 두 문장 이내로 소개하고, 처음 쓰는 사람이 할 일 3단계를 알려 준 뒤 무엇이 궁금한지 물어볼 것
@@ -1324,7 +1327,7 @@ const syncGuidePrompt = () => `크롬 확장 프로그램 "Watch Box"의 고급 
 - 되돌리려면 동기화 설정에서 연결 해제. 저장소의 파일은 지워지지 않음`;
 copyButton("sync-guide", syncGuidePrompt);
 
-// ChatGPT 우클릭 메뉴로 넘어온 선택 텍스트가 있으면 가져오기 창을 연다
+// AI 화면의 우클릭 메뉴로 넘어온 선택 텍스트가 있으면 가져오기 창을 연다
 async function init() {
   await ghInit();
   await load();
