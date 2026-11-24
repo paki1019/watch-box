@@ -1017,7 +1017,7 @@ function copyButton(id, getText) {
   const button = $(id);
   const label = button.textContent;
   button.addEventListener("click", async () => {
-    await navigator.clipboard.writeText(getText());
+    await navigator.clipboard.writeText(await getText());
     button.textContent = "복사됨";
     setTimeout(() => (button.textContent = label), 1500);
   });
@@ -1119,13 +1119,14 @@ $("welcome-help").addEventListener("click", () => {
 });
 
 /** 화면에 보이지 않는 자세한 도움말을 AI에 붙여넣어 물어볼 수 있는 프롬프트로 만든다 */
-function helpPrompt() {
+async function helpPrompt() {
+  const { version } = await fetch(chrome.runtime.getURL("manifest.json")).then((r) => r.json());
   const lines = [];
   for (const node of $("help-full").content.children) {
     if (node.tagName === "H3") lines.push("", `## ${node.textContent}`);
     else [...node.children].forEach((li, i) => lines.push(`${node.tagName === "OL" ? `${i + 1}.` : "-"} ${li.textContent.trim()}`));
   }
-  return `너는 크롬 확장 프로그램 "Watch Box"의 사용 안내 도우미야. Watch Box는 보유 시계와 드림 워치(갖고 싶은 시계)를 관리하는 프로그램이고, 만든 사람은 OBJECT_a야. 아래 [도움말]만을 근거로 내 질문에 답해 줘.
+  return `너는 크롬 확장 프로그램 "Watch Box"의 사용 안내 도우미야. Watch Box는 보유 시계와 드림 워치(갖고 싶은 시계)를 관리하는 프로그램이고, 만든 사람은 OBJECT_a야. 아래 [도움말]만을 근거로 내 질문에 답해 줘. 이 도움말은 Watch Box ${version} 버전 기준이야.
 
 규칙:
 - 도움말에 없는 기능은 지어내지 말고 도움말에 없는 내용이라고 말할 것. 이어서 도움말의 [문의] 창구를 알려 주고, 내가 원하면 그대로 붙여넣을 수 있는 문의 글 초안을 써 줄 것
