@@ -343,7 +343,8 @@
       <h3>지원 환경, 업데이트, 제거</h3>
       <ul>
         <li>컴퓨터의 크롬에서만 쓸 수 있습니다. 모바일(안드로이드·iOS)은 지원하지 않습니다. 모바일 크롬에는 확장 프로그램을 설치할 수 없기 때문입니다</li>
-        <li>업데이트 순서: ① 새 릴리스의 zip 받기 ② 설치할 때 둔 기존 watch-box 폴더 지우기 ③ 새 zip에서 watch-box 폴더를 꺼내 같은 자리에 두기 (윈도우는 zip을 더블클릭해 안의 폴더를 끌어다 놓고, 맥은 zip을 더블클릭하면 폴더가 생김) ④ chrome://extensions 에서 Watch Box 카드의 새로고침(↻) 누르기</li>
+        <li>업데이트 순서: ① 새 릴리스의 zip 받기 ② 설치할 때 둔 기존 watch-box 폴더 지우기 ③ 새 zip의 압축을 풀어 나온 watch-box 폴더를 같은 자리에 두기 ④ chrome://extensions 에서 Watch Box 카드의 새로고침(↻) 누르기</li>
+        <li>기존 watch-box 폴더가 어디 있는지 모르면 chrome://extensions 에서 Watch Box 카드의 세부정보를 누릅니다. 소스 항목에 폴더 위치가 나옵니다</li>
         <li>업데이트해도 저장한 시계와 이미지는 유지됩니다. 시계 정보와 이미지는 크롬 안에 저장되고 watch-box 폴더에는 프로그램 파일만 있습니다</li>
         <li>새 릴리스 받는 곳: https://github.com/paki1019/watch-box/releases/latest — 지금 설치된 버전은 왼쪽 위 Watch Box를 누르면 보이고, 이 주소의 버전이 더 높으면 업데이트할 수 있습니다</li>
         <li>설치 스크립트로 설치했다면 스크립트로 업데이트해도 됩니다. zip과 설치 스크립트를 같은 폴더에 받아, 윈도우는 PowerShell에서 powershell -ExecutionPolicy Bypass -File install.ps1, 맥은 터미널에서 bash install.sh 를 실행합니다</li>
