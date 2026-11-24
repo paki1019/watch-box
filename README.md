@@ -19,68 +19,69 @@
 안내 방법:
 - 먼저 내 컴퓨터가 윈도우인지 맥인지, 처음 설치인지 업데이트인지 물어볼 것
 - 한 번에 한 단계만 알려 주고, 내가 "다음"이라고 하면 다음 단계로 넘어갈 것
-- 단계마다 어디에서 무엇을 누르고 무엇을 입력하는지 그대로 적어 줄 것. 입력할 명령은 복사할 수 있게 따로 적어 줄 것
+- 단계마다 어디에서 무엇을 누르는지 그대로 적어 줄 것
 - 내가 화면이 다르다거나 오류가 났다고 하면, 지금 보이는 글자를 물어보고 맞춰서 안내할 것
+- 터미널이나 PowerShell 같은 명령 입력은 시키지 말 것. 아래 순서는 마우스만으로 끝남
 - 아래에 없는 내용은 지어내지 말 것
 
 [알아 둘 것]
 - Watch Box는 컴퓨터의 크롬에서만 쓸 수 있음. 휴대폰(안드로이드·iOS)은 지원하지 않음
 - 크롬 웹 스토어에 없는 확장 프로그램이라, 파일을 받아 크롬의 개발자 모드로 직접 불러와야 함
 - 받는 곳: https://github.com/paki1019/watch-box/releases/latest
+- 시계 정보와 이미지는 크롬 안에 저장됨. watch-box 폴더에는 프로그램 파일만 있어서, 업데이트하며 폴더를 지워도 데이터는 남음
 
 [해야 할 일 — 처음 설치]
-1. 위 주소를 열고 Assets 목록에서 파일 2개를 같은 폴더(보통 다운로드 폴더)에 받기
-   - watch-box-(버전).zip — 압축을 풀지 말고 그대로 둘 것
-   - 윈도우는 install.ps1, 맥·리눅스는 install.sh
-2. 설치 스크립트 실행하기
-   - 윈도우: 시작 메뉴에서 PowerShell을 열고 아래 두 줄을 차례로 입력
-     cd $env:USERPROFILE\Downloads
-     powershell -ExecutionPolicy Bypass -File install.ps1
-   - 맥: 터미널 앱을 열고 아래 두 줄을 차례로 입력
-     cd ~/Downloads
-     bash install.sh
-   - 설치할 폴더를 물어보면 그냥 Enter. 기본 폴더는 윈도우 %LOCALAPPDATA%\watch-box, 맥 ~/Applications/watch-box
-   - 끝나면 "완료: (설치 폴더)"가 나옴. 이 폴더 위치를 기억해 둘 것
+1. 위 주소를 열고 Assets 목록에서 watch-box-(버전).zip 하나만 받기. install.sh, install.ps1 은 받지 않아도 됨
+2. zip에서 watch-box 폴더 꺼내기
+   - 윈도우: 받은 zip을 더블클릭하면 안에 watch-box 폴더가 보임. 이 폴더를 문서 폴더로 끌어다 놓기
+   - 맥: 받은 zip을 더블클릭하면 같은 자리에 watch-box 폴더가 생김. 이 폴더를 문서 폴더로 옮기기
+   - 다운로드 폴더에 그대로 두면 나중에 정리하다 지울 수 있으니 꼭 옮길 것
 3. 크롬 주소창에 chrome://extensions 를 입력해 열고, 오른쪽 위의 "개발자 모드"를 켜기
-4. 왼쪽 위에 생긴 "압축해제된 확장 프로그램을 로드합니다"를 누르고 2에서 나온 설치 폴더를 고르기
-   - 윈도우: 폴더 고르는 창의 주소 칸에 %LOCALAPPDATA%\watch-box 를 붙여넣고 Enter 한 뒤 "폴더 선택"
-   - 맥: 폴더 고르는 창에서 Command+Shift+G 를 누르고 ~/Applications/watch-box 를 입력해 이동한 뒤 "선택"
+4. 왼쪽 위에 생긴 "압축해제된 확장 프로그램을 로드합니다"를 누르고, 문서 폴더로 옮긴 watch-box 폴더를 고르기. 폴더 안으로 들어가지 말고 watch-box 폴더 자체를 고른 뒤 "폴더 선택"(맥은 "선택")
 5. 크롬 오른쪽 위 퍼즐 조각 아이콘을 눌러 Watch Box를 찾고, 핀을 눌러 툴바에 고정하기. 아이콘을 누르면 Watch Box가 열림
 
 [해야 할 일 — 업데이트]
-1. 위 주소에서 새 zip과 설치 스크립트를 다시 받기
-2. 처음 설치의 2번과 똑같이 실행하기. 같은 폴더에 덮어쓰며, "업데이트 (이전 버전) → (새 버전)"이라고 나옴
-3. chrome://extensions 에서 Watch Box 카드의 새로고침(↻) 누르기
+1. 위 주소에서 새 watch-box-(버전).zip 받기
+2. 문서 폴더에 있는 기존 watch-box 폴더를 지우기 (휴지통으로)
+3. 처음 설치의 2번과 똑같이 새 zip에서 watch-box 폴더를 꺼내 문서 폴더의 같은 자리에 두기
+4. chrome://extensions 에서 Watch Box 카드의 새로고침(↻) 누르기
 - 저장한 시계와 이미지는 그대로 남음
 
 [자주 막히는 곳]
-- "watch-box-X.Y.Z.zip 을 찾지 못했습니다": zip과 설치 스크립트가 같은 폴더에 없음. 둘 다 다운로드 폴더에 있는지 확인. zip 이름을 바꿨다면 원래 이름으로 되돌릴 것
-- 윈도우에서 install.ps1을 더블클릭하면 메모장이 열림: 더블클릭하지 말고 PowerShell에서 위 명령으로 실행
+- "매니페스트 파일이 없거나 읽을 수 없습니다": 고른 폴더가 틀림. manifest.json 파일이 바로 들어 있는 watch-box 폴더를 골라야 함. zip 파일 자체나 한 단계 위 폴더를 고르면 안 됨
+- 윈도우에서 zip을 "압축 풀기"로 풀었다면 watch-box-(버전) 폴더 안에 watch-box 폴더가 있음. 안쪽 watch-box 폴더를 문서 폴더로 옮길 것
+- 맥에서 watch-box 2 폴더가 생김: 같은 자리에 예전 watch-box 폴더가 남아 있었던 것. 둘 다 지우고 zip을 다시 더블클릭
 - 크롬을 켤 때 "개발자 모드 확장 프로그램 사용 중지" 안내가 뜸: 직접 불러온 확장 프로그램이라 뜨는 안내. 닫으면 되고, 사용 중지를 누르지 말 것
 - 개발자 모드를 끄면 Watch Box도 꺼짐. 켠 채로 둘 것
-- 설치 폴더를 옮기거나 지우면 Watch Box가 사라짐. 그대로 둘 것
-- 확장 프로그램을 "삭제"하면 기기에 받아 둔 이미지는 지워짐. 다시 설치하면 이미지 주소로 다시 받아 옴
+- watch-box 폴더를 옮기거나 이름을 바꾸면 Watch Box가 사라짐. 업데이트할 때 말고는 그대로 둘 것
+- chrome://extensions 에서 Watch Box를 "삭제"하면 기기에 받아 둔 이미지는 지워짐. 다시 설치하면 이미지 주소로 다시 받아 옴
 - 그래도 안 되면 https://github.com/paki1019/watch-box/issues 에 남기거나 paki1019@gmail.com 으로 문의
 ```
 
 직접 설치하려면 아래 순서를 따른다.
 
-1. [릴리스](../../releases/latest)에서 `watch-box-<버전>.zip` 과 설치 스크립트를 같은 폴더에 받는다.
-   - mac · Linux: `install.sh`
-   - Windows: `install.ps1`
-2. 설치 스크립트를 실행한다. 설치 폴더를 물어보며, 그냥 Enter를 누르면 기본 폴더에 설치된다.
-   - mac · Linux: `bash install.sh` (기본 `~/Applications/watch-box`)
-   - Windows: `powershell -ExecutionPolicy Bypass -File install.ps1` (기본 `%LOCALAPPDATA%\watch-box`)
+1. [릴리스](../../releases/latest)에서 `watch-box-<버전>.zip` 을 받는다.
+2. zip에서 `watch-box` 폴더를 꺼내 지워지지 않을 곳(예: 문서 폴더)으로 옮긴다.
+   - Windows: zip을 더블클릭해 열고 안의 `watch-box` 폴더를 끌어다 놓는다.
+   - mac: zip을 더블클릭하면 같은 자리에 `watch-box` 폴더가 생긴다.
 3. 크롬에서 `chrome://extensions` 를 열고 오른쪽 위 **개발자 모드**를 켠다.
-4. **압축해제된 확장 프로그램을 로드합니다**를 누르고 설치 폴더를 고른다.
+4. **압축해제된 확장 프로그램을 로드합니다**를 누르고 옮긴 `watch-box` 폴더를 고른다.
 5. 툴바의 Watch Box 아이콘을 누르면 관리 페이지가 열린다.
 
 ## 업데이트
 
-1. 새 릴리스의 zip 과 설치 스크립트를 받아 같은 방법으로 실행한다 (같은 폴더에 덮어쓴다).
-2. `chrome://extensions` 에서 Watch Box 카드의 새로고침(↻)을 누른다.
+1. 새 릴리스의 zip을 받는다.
+2. 기존 `watch-box` 폴더를 지우고, 새 zip에서 꺼낸 `watch-box` 폴더를 같은 자리에 둔다.
+3. `chrome://extensions` 에서 Watch Box 카드의 새로고침(↻)을 누른다.
 
-저장한 시계와 이미지는 유지된다. 확장 프로그램을 **제거**하면 기기에 받아 둔 이미지는 지워지고, 다시 설치하면 이미지 주소로 다시 받아 온다.
+저장한 시계와 이미지는 유지된다. 시계 정보와 이미지는 크롬 안에 저장되고 `watch-box` 폴더에는 프로그램 파일만 있다. 확장 프로그램을 **제거**하면 기기에 받아 둔 이미지는 지워지고, 다시 설치하면 이미지 주소로 다시 받아 온다.
+
+### 설치 스크립트 (선택)
+
+터미널이 익숙하면 릴리스의 설치 스크립트를 zip과 같은 폴더에 받아 실행해도 된다. 설치 폴더를 물어보며, 같은 폴더에 다시 실행하면 업데이트된다.
+
+- mac · Linux: `bash install.sh` (기본 `~/Applications/watch-box`)
+- Windows: `powershell -ExecutionPolicy Bypass -File install.ps1` (기본 `%LOCALAPPDATA%\watch-box`)
 
 ## 처음 쓰기
 
