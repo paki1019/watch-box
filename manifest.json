@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Watch Box",
+  "version": "1.9.2",
+  "description": "보유 시계·드림 워치 관리 — by OBJECT_a",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "contextMenus"
+  ],
+  "host_permissions": [
+    "https://*/*"
+  ],
+  "action": {
+    "default_title": "Watch Box",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArFiq2sscW2dezd7SwPiDoBiFG6jxgStEvQ0nHmqUObSjNwxjRjmpvZfXf93JEIEPhKYNd6X7/kLtSC+SXmXPmZFgsHPLOO5M8RIPqRdtASHETH+tNZ4UAkH6dBaveXXBqDIC9SJ/H3EQl6ffT9eaT9jeVAjLZrMDK63RyyM6SwGtPSwhUrYlVV0jqP1PJqKMvLcng1bUAmmkdDJEutEe96XId5cedlbPOyZK/E/HApJhYikFxLz0DYW6AY7etSjxkZ6VZmydMzqLVKOFJssJYVMvcbfYI0g2bFlv1HhOTHErFOvsMj3mZfL4EmuVPMvVN3j+Te7FaGctJDcq8qm/7wIDAQAB"
+}

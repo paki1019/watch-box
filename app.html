@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>Watch Box</title>
+  <link rel="icon" href="icons/icon.svg">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="top">
+    <h1 id="title">Watch Box</h1>
+    <nav>
+      <button class="tab" data-list="owned">보유 <span id="count-owned"></span></button>
+      <button class="tab" data-list="dream">드림 <span id="count-dream"></span></button>
+    </nav>
+    <button id="import" class="primary">가져오기</button>
+  </header>
+
+  <div class="summary">
+    <section id="stats" class="stats"></section>
+    <div id="hidden-toggle" class="hidden-toggle" hidden>
+      <span id="hidden-count"></span>
+      <div class="toggle">
+        <label><input type="radio" name="show-hidden" value="" checked>숨김</label>
+        <label><input type="radio" name="show-hidden" value="1">표시</label>
+      </div>
+    </div>
+  </div>
+
+  <div id="filters" class="filters" hidden></div>
+
+  <ul id="list" class="grid"></ul>
+  <p id="empty" hidden></p>
+
+  <dialog id="dialog">
+    <form id="form" method="dialog">
+      <div class="form-head">
+        <h2 tabindex="-1" autofocus>시계 정보</h2>
+        <button type="button" id="copy-refresh">갱신 프롬프트 복사</button>
+      </div>
+      <div id="hero" class="hero" hidden></div>
+      <div id="thumbs" class="thumbs" hidden></div>
+
+      <div class="group">
+        <div class="group-title">기본</div>
+        <div class="inline even">
+          <label>브랜드 <input name="brand" required maxlength="50"></label>
+          <label>모델 <input name="model" required maxlength="80"></label>
+        </div>
+        <div class="inline even">
+          <div class="field">구분
+            <div class="toggle">
+              <label><input type="radio" name="list" value="owned" checked>보유</label>
+              <label><input type="radio" name="list" value="dream">드림</label>
+            </div>
+          </div>
+          <label>가격 (원) <input name="price" inputmode="numeric"></label>
+        </div>
+        <div class="inline even">
+          <div class="field">선호도
+            <input type="hidden" name="stars">
+            <div class="stars-input" id="stars">
+              <button type="button" data-star="1" aria-label="별 1개">★</button>
+              <button type="button" data-star="2" aria-label="별 2개">★</button>
+              <button type="button" data-star="3" aria-label="별 3개">★</button>
+            </div>
+          </div>
+          <div class="field dream-only" title="목록·개수·합계·브랜드에서 제외">목록에서 숨기기
+            <div class="toggle">
+              <label><input type="radio" name="hidden" value="1">숨김</label>
+              <label><input type="radio" name="hidden" value="" checked>표시</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">케이스</div>
+        <div class="inline">
+          <label>직경 (mm) <input name="diameter" type="number" min="0" step="0.1"></label>
+          <label>두께 (mm) <input name="thickness" type="number" min="0" step="0.01"></label>
+          <label>러그 투 러그 (mm) <input name="lug" type="number" min="0" step="0.1"></label>
+        </div>
+        <div class="inline">
+          <label>소재 <input name="material" maxlength="40"></label>
+          <label>방수 (m) <input name="water" type="number" min="0" step="1"></label>
+          <label>출시 연도 <input name="released" type="number" min="1800" max="2100" step="1"></label>
+          <label>무게 (g) <input name="weight" type="number" min="0" step="0.1"></label>
+          <label>무게 비고 <input name="weightNote" maxlength="30" placeholder="예: 브레이슬릿 포함"></label>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">무브먼트</div>
+        <div class="inline two">
+          <label>구동 방식 · 칼리버 <input name="movement" maxlength="60"></label>
+          <label>파워리저브 (시간) <input name="reserve" type="number" min="0" step="1"></label>
+        </div>
+      </div>
+
+      <div class="group owned-only">
+        <div class="group-title">구매 정보</div>
+        <div class="inline">
+          <label>구매 연월 <input name="date" type="month"></label>
+          <label>구매 유형
+            <select name="method">
+              <option value=""></option>
+              <option>신품</option>
+              <option>중고</option>
+              <option>미개봉 중고</option>
+            </select>
+          </label>
+          <label>구매가 (원) <input name="paid" inputmode="numeric"></label>
+        </div>
+      </div>
+
+      <div class="group owned-only" title="적으면 판 시계로 보고 숨깁니다 — 목록·개수·합계·브랜드에서 제외">
+        <div class="group-title">판매 정보</div>
+        <div class="inline">
+          <label>판매 연월 <input name="soldDate" type="month"></label>
+          <label>판매가 (원) <input name="soldPrice" inputmode="numeric"></label>
+          <label>판매 비고 <input name="soldNote" maxlength="40" placeholder="예: 중고 판매, 증여"></label>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">기타</div>
+        <label>이미지 URL (한 줄에 하나, 최대 10개) <textarea name="imgs" rows="3"></textarea></label>
+        <label>메모 <textarea name="note" rows="3" maxlength="500"></textarea></label>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="delete">삭제</button>
+        <button type="button" id="cancel">취소</button>
+        <button type="submit" class="primary" value="save">저장</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="viewer">
+    <img id="viewer-img" alt="">
+    <button type="button" id="viewer-prev" aria-label="이전 이미지">‹</button>
+    <button type="button" id="viewer-next" aria-label="다음 이미지">›</button>
+    <div id="viewer-count"></div>
+  </dialog>
+
+  <dialog id="star-dialog">
+    <h2 tabindex="-1" autofocus>선호도</h2>
+    <div id="star-chips" class="brands"></div>
+    <div class="actions">
+      <button type="button" id="star-close">닫기</button>
+    </div>
+  </dialog>
+
+  <dialog id="price-dialog">
+    <h2 tabindex="-1" autofocus>가격대</h2>
+    <div id="price-chips" class="brands"></div>
+    <div class="actions">
+      <button type="button" id="price-close">닫기</button>
+    </div>
+  </dialog>
+
+  <dialog id="brand-dialog">
+    <h2 tabindex="-1" autofocus>브랜드</h2>
+    <div id="brands" class="brands"></div>
+    <div class="actions">
+      <button type="button" id="brand-close">닫기</button>
+    </div>
+  </dialog>
+
+  <dialog id="prompt-dialog">
+    <h2>프롬프트 복사</h2>
+    <p id="prompt-text">어느 쪽에 추가할 시계인가요?</p>
+    <div class="choices">
+      <button type="button" data-prompt="owned">보유</button>
+      <button type="button" data-prompt="dream">드림</button>
+    </div>
+  </dialog>
+
+  <dialog id="export-dialog">
+    <h2>전체 복사</h2>
+    <p id="export-text"></p>
+    <div class="actions">
+      <button type="button" id="export-no">취소</button>
+      <button type="button" id="export-yes" class="primary">복사</button>
+    </div>
+  </dialog>
+
+  <dialog id="confirm-dialog">
+    <h2>시계 삭제</h2>
+    <p id="confirm-text"></p>
+    <div class="actions">
+      <button type="button" id="confirm-no">취소</button>
+      <button type="button" id="confirm-yes" class="danger">삭제</button>
+    </div>
+  </dialog>
+
+  <dialog id="import-dialog">
+    <h2 id="import-title" tabindex="-1" autofocus>가져오기</h2>
+    <ol class="steps">
+      <li>ChatGPT에 시계 이름을 적고, 그 아래에 복사한 프롬프트 붙여넣기 <button type="button" id="copy-prompt">프롬프트 복사</button></li>
+      <li>ChatGPT가 출력한 JSON을 아래에 붙여넣기</li>
+    </ol>
+    <textarea id="import-text" rows="6" placeholder='[{"brand": "…", "model": "…"}]'></textarea>
+    <p id="import-error" hidden></p>
+    <ul id="import-list"></ul>
+    <div class="actions">
+      <button type="button" id="import-cancel">취소</button>
+      <button type="button" id="import-save" class="primary" disabled>저장</button>
+    </div>
+  </dialog>
+
+  <dialog id="pick-dialog">
+    <h2 id="pick-title" tabindex="-1" autofocus></h2>
+    <div class="pick-body">
+      <div id="pick-panel"></div>
+      <div class="pick-big"><img id="pick-big" alt=""></div>
+    </div>
+    <div class="actions">
+      <button type="button" id="pick-close" class="primary">완료</button>
+    </div>
+  </dialog>
+
+  <dialog id="help-dialog">
+    <h2 tabindex="-1" autofocus>사용 방법</h2>
+    <div class="help">
+      <h3>시계 추가</h3>
+      <ol>
+        <li><b>가져오기</b> → <b>프롬프트 복사</b> → 보유·드림 중 선택</li>
+        <li>ChatGPT에 시계 이름을 먼저 적고, 그 아래에 프롬프트를 붙여넣어 보내기</li>
+        <li>출력된 JSON을 가져오기 창에 붙여넣기 — 또는 ChatGPT에서 JSON을 선택하고 우클릭 → <b>Watch Box에 추가</b></li>
+        <li>목록을 확인하고 <b>저장</b>. 이미 있는 시계는 <b>덮어쓰기</b>로 표시되고 빈 항목만 채워집니다</li>
+      </ol>
+
+      <h3>이미지 고르기</h3>
+      <ul>
+        <li>가져오기 목록의 <b>이미지 n개 선택 · 고르기</b>를 누르면 이미지 고르기 창이 열립니다</li>
+        <li>누른 순서대로 번호가 붙고 1번이 대표 이미지입니다. 다시 누르면 빠집니다</li>
+        <li>안 열리는 이미지, 너무 작은 이미지, 중복 이미지는 자동으로 빠집니다. 눌러서 다시 넣을 수 있습니다</li>
+        <li>덮어쓰기일 때는 기존 이미지와 새 이미지가 함께 나오고, 처음엔 기존 이미지만 골라져 있습니다. 새 이미지는 눌러서 추가하고, 번호를 뺀 기존 이미지는 저장할 때 지워집니다</li>
+      </ul>
+
+      <h3>시계 정보</h3>
+      <ul>
+        <li>카드를 누르면 정보 창이 열립니다. 고친 뒤 <b>저장</b>, 지우려면 <b>삭제</b></li>
+        <li>항목은 기본(브랜드·모델·구분·가격·선호도), 케이스(직경·두께·러그 투 러그·소재·방수·출시 연도·무게·무게 비고), 무브먼트(구동 방식·칼리버·파워리저브), 기타(이미지 URL·메모)입니다. 보유 시계에는 구매 정보(구매 연월·구매 유형·구매가)와 판매 정보(판매 연월·판매가·판매 비고)가 더 있습니다</li>
+        <li><b>구분</b>에서 보유와 드림을 바꿀 수 있습니다. 드림 시계를 샀다면 보유로 바꾸고 구매 정보를 적으면 됩니다</li>
+        <li><b>가격</b>은 현재 시세나 정가, <b>구매가</b>는 실제로 산 금액입니다. 보유 카드에는 구매가가, 없으면 가격이 나옵니다</li>
+        <li><b>무게 비고</b>에는 무게를 잰 기준을 적습니다 (예: 브레이슬릿 포함, 헤드만). 같은 시계도 줄 구성에 따라 무게가 달라집니다</li>
+        <li>이미지는 좌우 버튼으로 넘기고, 누르면 크게 볼 수 있습니다</li>
+        <li>큰 이미지 왼쪽 아래의 <b>이미지 편집</b>을 누르면 작은 이미지 줄이 펴집니다. 끌어서 순서를 바꿀 수 있고, 맨 앞이 카드에 나오는 대표 이미지입니다. 작은 이미지의 <b>×</b>를 누르면 그 이미지를 뺍니다. 바꾼 뒤 <b>저장</b></li>
+        <li>이미지는 <b>이미지 URL</b> 칸에 주소(https)를 한 줄에 하나씩 넣습니다 (최대 10개). 첫 줄이 카드에 나오는 대표 이미지입니다</li>
+        <li><b>갱신 프롬프트 복사</b>로 같은 시계의 정보를 ChatGPT에서 다시 받아 덮어쓸 수 있습니다. 보유 시계에 적어 둔 가격은 유지됩니다</li>
+      </ul>
+
+      <h3>찾아보기</h3>
+      <ul>
+        <li>위쪽 탭에서 <b>보유</b>와 <b>드림</b> 목록을 오갑니다. 탭 옆 숫자는 시계 개수입니다</li>
+        <li>위쪽의 <b>시계 · 합계 · 브랜드</b>를 누르면 선호도·가격대·브랜드로 걸러 볼 수 있습니다. 여러 개를 함께 고를 수 있습니다</li>
+        <li>걸린 조건은 아래에 태그로 나오고, 태그를 누르면 풀립니다. <b>모두 해제</b>로 한 번에 풉니다</li>
+        <li>합계는 보유 목록에서는 구매가, 드림 목록에서는 가격을 더한 값입니다</li>
+        <li>대소문자만 다른 브랜드(예: Omega와 OMEGA)는 하나로 묶이고, 가장 많이 쓴 표기로 보입니다</li>
+        <li>순서는 선호도 높은 순, 같으면 금액 낮은 순입니다 (보유는 구매가, 드림은 가격)</li>
+      </ul>
+
+      <h3>숨기기</h3>
+      <ul>
+        <li>드림 시계는 정보 창에서 <b>목록에서 숨기기</b>를 <b>숨김</b>으로 바꾸면 목록·개수·합계·브랜드에서 빠집니다</li>
+        <li>보유 시계는 <b>판매 정보</b>의 판매 연월·판매가·판매 비고 중 하나라도 적으면 숨긴 시계가 되어 같은 방식으로 빠집니다. 증여·교환처럼 판 것이 아니면 판매 연월이나 판매 비고만 적으면 됩니다. 세 칸을 모두 비우면 다시 목록에 나옵니다</li>
+        <li>숨긴 시계가 있으면 통계 오른쪽에 <b>숨긴 시계</b> 개수와 <b>숨김 · 표시</b>가 나옵니다. <b>표시</b>를 고르면 구분선 아래에 다시 나오고 통계에도 포함됩니다</li>
+        <li><b>숨김</b> 상태에서는 목록 아래 <b>숨긴 시계 n개 보기</b>로 통계에 넣지 않고 흐리게 펼쳐 볼 수 있습니다</li>
+        <li>판매 정보를 적은 시계의 카드에는 판매 연월, 판매가, 판매 비고가 함께 나옵니다</li>
+      </ul>
+
+      <h3>저장과 동기화</h3>
+      <ul>
+        <li>시계 정보는 크롬 계정으로 동기화되어 같은 계정으로 로그인한 다른 기기에서도 보입니다</li>
+        <li>이미지는 이 기기에 저장됩니다. 다른 기기에서는 이미지 주소로 다시 받아 옵니다</li>
+        <li>주소가 열리지 않게 된 이미지는 이미 받은 기기에만 남습니다. 다른 기기에서도 보려면 이미지 URL을 열리는 주소로 바꾸세요</li>
+        <li><b>백업</b>: <b>가져오기</b> 창을 열고 맨 위 제목을 누르면 전체 시계가 JSON으로 복사됩니다. 메모장 등에 붙여넣어 파일로 보관하세요</li>
+        <li><b>복원</b>: 보관해 둔 JSON을 가져오기 창에 붙여넣고 저장하면 됩니다. 이미지는 주소로 다시 받아 옵니다</li>
+        <li>시계 정보는 크롬 동기화 용량(약 100KB)을 씁니다. 왼쪽 위 <b>Watch Box</b>를 누르고 <b>동기화</b> 줄을 누르면 열리는 <b>동기화 설정</b>에서 사용량이 보이고, 가득 차면 저장할 때 알려 줍니다</li>
+        <li>왼쪽 위 <b>Watch Box</b>를 누르면 버전과 동기화 상태를 볼 수 있고, 이 도움말도 거기서 엽니다. 동기화 옆의 동그란 점은 신호등으로, 초록은 정상, 노랑은 진행 중이거나 주의, 빨강은 오류입니다</li>
+      </ul>
+
+      <h3>고급: GitHub 스토리지</h3>
+      <ul>
+        <li>왼쪽 위 <b>Watch Box</b>를 누르고 <b>동기화</b> 줄을 누르면 <b>동기화 설정</b>이 열립니다. 여기서 동기화 방식을 바꿉니다. 기본은 크롬 계정 동기화이고, 고급 기능으로 GitHub 스토리지를 연결할 수 있습니다</li>
+        <li>GitHub 스토리지를 연결하면 시계 정보와 이미지 사본을 내 비공개 GitHub 저장소에 보관합니다. 크롬 동기화의 용량 제한(약 100KB)이 없어지고, 이미지 주소가 죽어도 사본으로 볼 수 있습니다</li>
+        <li>연결에는 GitHub 계정, 비공개 저장소, 그 저장소의 Contents 읽기·쓰기 권한이 있는 토큰이 필요합니다. <b>연결 가이드 프롬프트 복사</b>를 눌러 AI에 붙여넣으면 만드는 과정을 한 단계씩 안내받을 수 있습니다</li>
+        <li>연결하면 같은 크롬 계정을 쓰는 다른 기기도 자동으로 같은 저장소를 씁니다. 다른 기기의 변경은 페이지를 열거나 다시 볼 때, 또는 <b>지금 동기화</b>를 누를 때 반영됩니다</li>
+        <li>같은 시계를 두 기기에서 고쳤으면 나중에 고친 쪽이 남습니다. 지운 것도 수정으로 쳐서, 한쪽에서 지우고 다른 쪽에서 고쳤으면 나중에 한 쪽을 따릅니다</li>
+        <li>지운 시계는 저장소에서 파일을 없애지 않고 지웠다는 표시만 남깁니다. 화면에는 나오지 않습니다</li>
+        <li><b>연결 해제</b>를 누르면 크롬 계정 동기화로 돌아갑니다. 저장소의 파일은 지워지지 않습니다. 시계가 많아 크롬 계정 용량을 넘으면 돌아갈 수 없습니다</li>
+        <li>토큰이 만료되면 동기화가 멈추고 알림이 뜹니다. GitHub에서 새 토큰을 만든 뒤 <b>동기화 설정</b>의 토큰 칸에 넣고 <b>토큰 바꾸기</b>를 누르세요. 그동안 고친 내용은 기기에 남아 있다가 다시 연결되면 올라갑니다</li>
+      </ul>
+
+      <h3>AI에게 물어보기</h3>
+      <ul>
+        <li><b>도움말 프롬프트 복사</b>를 누르고 ChatGPT나 Claude 같은 AI에 붙여넣으면, 이 도움말을 바탕으로 사용법을 질문하고 답을 받을 수 있습니다</li>
+      </ul>
+    </div>
+    <div class="actions">
+      <button type="button" id="copy-help" class="primary">도움말 프롬프트 복사</button>
+      <button type="button" id="help-close">닫기</button>
+    </div>
+  </dialog>
+
+  <dialog id="sync-dialog">
+    <form id="sync-form">
+      <h2 tabindex="-1" autofocus>동기화 설정</h2>
+      <p class="sync-mode"><span id="sync-light" class="light" data-state="yellow"></span><span id="sync-mode"></span></p>
+      <p class="sync-status"><span id="sync-status"></span> <button type="button" id="sync-now" class="link">지금 동기화</button></p>
+      <div class="help">
+        <p>기본은 <b>크롬 계정 동기화</b>입니다. 설정이 필요 없지만 용량이 약 100KB로 제한되고, 이미지는 주소만 동기화됩니다.</p>
+        <p><b>GitHub 스토리지</b>(고급)를 연결하면 시계 정보와 이미지 사본을 내 비공개 저장소에 보관합니다. 용량 제한이 사실상 없고, 이미지 주소가 죽어도 사본으로 볼 수 있습니다. GitHub 계정과 비공개 저장소, 토큰이 필요합니다. <button type="button" id="sync-guide" class="link">연결 가이드 프롬프트 복사</button></p>
+      </div>
+      <div class="sync-fields">
+        <label>저장소 (계정/저장소 이름) <input id="sync-repo" placeholder="my-account/watch-box-data" autocomplete="off"></label>
+        <label>토큰 (그 저장소의 Contents 읽기·쓰기 권한) <input id="sync-token" type="password" autocomplete="off"></label>
+      </div>
+      <div class="actions">
+        <button type="button" id="sync-off" class="quiet">연결 해제</button>
+        <button type="button" id="sync-close">닫기</button>
+        <button type="submit" id="sync-on" class="primary">연결</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="welcome-dialog">
+    <h2 tabindex="-1" autofocus>Watch Box 시작하기</h2>
+    <div class="help">
+      <p>보유 시계와 드림 워치(갖고 싶은 시계)를 정리하는 프로그램입니다. 아직 등록된 시계가 없습니다.</p>
+      <ol>
+        <li><b>가져오기</b> → <b>프롬프트 복사</b> → 보유·드림 중 선택</li>
+        <li>ChatGPT에 시계 이름을 적고, 그 아래에 프롬프트를 붙여넣어 보내기</li>
+        <li>출력된 JSON을 가져오기 창에 붙여넣고 <b>저장</b></li>
+      </ol>
+      <p>다른 기기에서 쓰던 시계는 같은 크롬 계정으로 로그인하면 잠시 뒤 자동으로 나타납니다.</p>
+    </div>
+    <div class="actions">
+      <button type="button" id="welcome-help">도움말</button>
+      <button type="button" id="welcome-close">닫기</button>
+      <button type="button" id="welcome-import" class="primary">가져오기 열기</button>
+    </div>
+  </dialog>
+
+  <dialog id="about-dialog">
+    <h2 tabindex="-1" autofocus>Watch Box <small>by OBJECT_a</small></h2>
+    <dl id="about" class="about"></dl>
+    <div class="actions">
+      <button type="button" id="help">도움말</button>
+      <button type="button" id="about-close">닫기</button>
+    </div>
+  </dialog>
+
+  <p id="toast" popover="manual"></p>
+
+  <script src="sync.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
